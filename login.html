@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Planify</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to bottom right, #d0e7ff, #a8c4e8); /* Same as 60% section */
+      font-family: 'Arial', sans-serif;
+      color: #083759;
+    }
+
+    h2 {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      gap: 15px;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    input[type="text"], input[type="password"] {
+      background: rgba(255, 255, 255, 0.8);
+      color: #083759;
+    }
+
+    input::placeholder {
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    button {
+      padding: 12px;
+      font-size: 16px;
+      background-color: #5c9cd8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #417cb8;
+    }
+  </style>
+</head>
+<body>
+  <h2>Login to Planify</h2>
+  <form onsubmit="goToDashboard(event)">
+    <input type="text" placeholder="Name" required>
+    <input type="password" placeholder="Password" required>
+    <button type="submit">Let’s Go!</button>
+  </form>
+
+  <script>
+    function goToDashboard(event) {
+      event.preventDefault();
+      window.top.location.href = 'motivation.html';
+      // Forces full-page redirection
+    }
+  </script>
+</body>
+</html>

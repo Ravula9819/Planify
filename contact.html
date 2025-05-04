@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Planify</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #e6f7ff, #cce0f5);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            color: #5c9cd8;
+        }
+        .faq {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .faq h3 {
+            background: #5c9cd8;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .faq p {
+            display: none;
+            padding: 10px;
+            background: #f7f7f7;
+            border-left: 5px solid #5c9cd8;
+        }
+        .contact-form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #5c9cd8;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📩 Contact Us</h2>
+        <p>Have any questions? Feel free to reach out to us.</p>
+
+        <div class="faq">
+            <h3 onclick="toggleFAQ(1)">🔹 How does Planify work?</h3>
+            <p id="faq1">Planify helps you manage your daily tasks by setting reminders, categorizing them, and ensuring you never miss anything important.</p>
+
+            <h3 onclick="toggleFAQ(2)">🔹 How do I mark a task as complete?</h3>
+            <p id="faq2">Simply click on the red circle (⭕) next to a task. It will be moved to the completed tasks section.</p>
+
+            <h3 onclick="toggleFAQ(3)">🔹 Can I delete a task?</h3>
+            <p id="faq3">Yes, you can delete a task by clicking the 🗑️ icon next to it.</p>
+
+            <h3 onclick="toggleFAQ(4)">🔹 Where can I view completed tasks?</h3>
+            <p id="faq4">Go to the 'Tasks' section in the sidebar to view all completed tasks.</p>
+        </div>
+
+        <div class="contact-form">
+            <h3>📧 Send Us a Message</h3>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <textarea id="message" placeholder="Your Message" rows="4" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleFAQ(num) {
+            let faq = document.getElementById("faq" + num);
+            faq.style.display = faq.style.display === "block" ? "none" : "block";
+        }
+
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let message = document.getElementById("message").value;
+            
+            let mailtoLink = `mailto:your-email@example.com?subject=Contact from ${name}&body=${message} (Reply to: ${email})`;
+            window.location.href = mailtoLink;
+        });
+    </script>
+
+</body>
+</html>

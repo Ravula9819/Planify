@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Progress Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #627284, #2575fc);
+            color: white;
+        }
+        .container {
+            width: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .task-list {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .task-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .progress-container {
+            width: 100%;
+            background: #f3f3f3;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            height: 30px;
+            width: 0%;
+            background: #4CAF50;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            line-height: 30px;
+            border-radius: 30px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+        input {
+            width: 60px;
+            text-align: center;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📊 Track Your Task Progress</h2>
+
+        <!-- Dynamic Task List -->
+        <div class="task-list">
+            <h3>Select a Task:</h3>
+            <div class="task-item" onclick="setTask('Complete Project Report')">📄 Complete Project Report</div>
+            <div class="task-item" onclick="setTask('Daily Workout')">🏋️ Daily Workout</div>
+            <div class="task-item" onclick="setTask('Study for Exam')">📚 Study for Exam</div>
+            <div class="task-item" onclick="setTask('Read a Book')">📖 Read a Book</div>
+        </div>
+
+        <h3 id="taskName">📌 Selected Task: None</h3>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+
+        <!-- Update Progress -->
+        <input type="number" id="progressInput" min="0" max="100" value="0">%
+        <button onclick="updateProgress()">Update Progress</button>
+    </div>
+
+    <script>
+        let selectedTask = "";
+
+        function setTask(task) {
+            selectedTask = task;
+            document.getElementById("taskName").innerText = "📌 Selected Task: " + task;
+        }
+
+        function updateProgress() {
+            if (!selectedTask) {
+                alert("⚠️ Please select a task first!");
+                return;
+            }
+
+            let progressValue = document.getElementById("progressInput").value;
+            if (progressValue < 0 || progressValue > 100) {
+                alert("⚠️ Enter a valid percentage (0-100)!");
+                return;
+            }
+
+            document.getElementById("progressBar").style.width = progressValue + "%";
+            document.getElementById("progressBar").innerText = progressValue + "%";
+        }
+    </script>
+
+</body>
+</html>

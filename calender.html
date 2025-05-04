@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - Planify</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            flex-direction: column;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            height: 90%;
+        }
+        .calendar-container {
+            flex: 2; /* Make calendar take more space */
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            height: 100%;
+            overflow: auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        .month-year {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .days-row, .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .days-row div {
+            font-weight: bold;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+        .calendar-grid div {
+            padding: 20px;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        .calendar-grid div:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .today {
+            background: #ffcc00 !important;
+            color: black !important;
+            font-weight: bold;
+        }
+        .nav-buttons {
+            margin: 10px 0;
+        }
+        .nav-buttons button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .nav-buttons button:hover {
+            background: #45a049;
+        }
+
+        /* ✅ Task Section */
+        .task-section {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-left: 20px;
+            text-align: center;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .task-section h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .task-section input, .task-section button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .task-section input {
+            background: white;
+            color: black;
+        }
+        .task-section button {
+            background: #ffcc00;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .task-section button:hover {
+            background: #ffaa00;
+        }
+        .task-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .task-list p {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📅 Planify Calendar</h2>
+
+    <div class="container">
+        <!-- ✅ Bigger Calendar -->
+        <div class="calendar-container">
+            <div class="month-year" id="monthYear"></div>
+            
+            <div class="nav-buttons">
+                <button onclick="prevMonth()">⬅️ Prev</button>
+                <button onclick="nextMonth()">Next ➡️</button>
+            </div>
+
+            <!-- Days Row -->
+            <div class="days-row">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <!-- ✅ Task Section -->
+        <div class="task-section">
+            <h3>📌 Add Task for Selected Date</h3>
+            <input type="text" id="taskInput" placeholder="Enter task">
+            <button onclick="saveTask()">Add Task</button>
+            <div class="task-list" id="taskList"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        let selectedDate = null;
+        let tasks = JSON.parse(localStorage.getItem("calendarTasks")) || {};
+
+        function renderCalendar() {
+            const monthYear = document.getElementById("monthYear");
+            const calendarGrid = document.getElementById("calendarGrid");
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Set month-year text
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            monthYear.innerText = `${monthNames[month]} ${year}`;
+
+            // Get first day & number of days in the month
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Clear existing grid
+            calendarGrid.innerHTML = "";
+
+            // Add empty slots for the first row
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement("div");
+                calendarGrid.appendChild(emptyDiv);
+            }
+
+            // Add actual days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = `${year}-${month + 1}-${day}`;
+                const dayDiv = document.createElement("div");
+                dayDiv.innerText = day;
+                dayDiv.setAttribute("data-date", dateKey);
+
+                // Highlight today's date
+                const today = new Date();
+                if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dayDiv.classList.add("today");
+                }
+
+                dayDiv.addEventListener("click", () => openTaskSection(dateKey));
+
+                calendarGrid.appendChild(dayDiv);
+            }
+        }
+
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function openTaskSection(date) {
+            selectedDate = date;
+            document.getElementById("taskInput").placeholder = `Enter task for ${date}`;
+        }
+
+        function saveTask() {
+            const taskInput = document.getElementById("taskInput").value;
+            if (!taskInput) return;
+
+            if (!tasks[selectedDate]) {
+                tasks[selectedDate] = [];
+            }
+            tasks[selectedDate].push(taskInput);
+            localStorage.setItem("calendarTasks", JSON.stringify(tasks));
+
+            document.getElementById("taskInput").value = "";
+            renderCalendar();
+        }
+
+        renderCalendar();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Planify</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #f5f6f7, #506478);
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            padding: 20px;
+            gap: 20px;
+        }
+        .reviews-section {
+            width: 40%;
+            background: rgb(159, 186, 193);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            height: 80vh;
+        }
+        .reviews-section h2 {
+            text-align: center;
+        }
+        .review-box {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .input-box {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .input-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-box button {
+            background: #5c9cd8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .bot-section {
+            width: 60%;
+            background: rgb(159, 186, 193);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .chat-input {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .chat-input button {
+            background: #5c9cd8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="reviews-section">
+            <h2>Reviews & Opinions</h2>
+            <div id="reviews">
+                <div class="review-box">"Time blocking has really helped me organize my day!" - Alex</div>
+                <div class="review-box">"I use the Pomodoro technique, and it works wonders!" - Jamie</div>
+                <div class="review-box">"Setting realistic goals makes me more productive." - Chris</div>
+            </div>
+            <div class="input-box">
+                <input type="text" id="reviewInput" placeholder="Share your thoughts...">
+                <button onclick="addReview()">Submit</button>
+            </div>
+        </div>
+        <div class="bot-section">
+            <h2>AI Bot Assistant</h2>
+            <div class="chat-box" id="chatBox">
+                <p><strong>Bot:</strong> Hello! Ask me about time management.</p>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Ask something...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addReview() {
+            let input = document.getElementById("reviewInput").value;
+            if (!input.trim()) return;
+            let reviewBox = document.createElement("div");
+            reviewBox.className = "review-box";
+            reviewBox.innerText = input;
+            document.getElementById("reviews").appendChild(reviewBox);
+            document.getElementById("reviewInput").value = "";
+        }
+
+        function sendMessage() {
+            let userMessage = document.getElementById("chatInput").value;
+            if (!userMessage.trim()) return;
+            
+            let chatBox = document.getElementById("chatBox");
+            let userMsg = `<p><strong>You:</strong> ${userMessage}</p>`;
+            chatBox.innerHTML += userMsg;
+            document.getElementById("chatInput").value = "";
+
+            setTimeout(() => {
+                let botReply = getBotReply(userMessage);
+                chatBox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
+            }, 1000);
+        }
+
+        function getBotReply(message) {
+            let lowerMsg = message.toLowerCase();
+            if (lowerMsg.includes("time management")) return "Try the Pomodoro technique or time blocking!";
+            if (lowerMsg.includes("productivity")) return "Prioritizing tasks helps boost productivity!";
+            if (lowerMsg.includes("procrastination")) return "Breaking work into small steps can help reduce procrastination.";
+            return "The Pomodoro Technique is a time management method designed to boost focus and productivity by breaking work into short, focused intervals. The technique involves setting a timer for 25 minutes to work on a task without distractions, followed by a 5-minute break to refresh the mind. After completing four Pomodoros, a longer break of 15-30 minutes is taken. This cycle helps maintain concentration, reduce procrastination, and prevent burnout. By creating a sense of urgency and incorporating regular rest periods, the Pomodoro Technique enhances efficiency while ensuring mental well-being.";
+        }
+    </script>
+</body>
+</html>
